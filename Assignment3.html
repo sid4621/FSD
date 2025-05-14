@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    header, nav, main, footer {
+      padding: 20px;
+    }
+
+    header {
+      background-color: #e0f7fa;
+      text-align: center;
+    }
+
+    nav {
+      background-color: #00796b;
+      color: white;
+      text-align: center;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+
+    section {
+      margin: 20px;
+    }
+
+    footer {
+      background-color: #e0e0e0;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    video, audio {
+      display: block;
+      margin: 20px auto;
+      max-width: 90%;
+    }
+
+    @media (max-width: 600px) {
+      nav a {
+        display: block;
+        margin: 10px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Welcome to My Portfolio</h1>
+    <p>Hello, I am student exploring web development!</p>
+  </header>
+
+  <nav>
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#media">Media</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <main>
+    <section id="about">
+      <article>
+        <h2>About Me</h2>
+        <p>I am passionate about technology and design. I enjoy building simple websites and learning how the internet works.</p>
+      </article>
+    </section>
+
+    <section id="skills">
+      <article>
+        <h2>Skills</h2>
+        <ul>
+          <li>HTML5 and CSS3</li>
+          <li>Basic JavaScript</li>
+          <li>Graphic Design</li>
+        </ul>
+      </article>
+    </section>
+
+    <section id="media">
+      <article>
+        <h2>My Introduction Video</h2>
+        <video controls>
+          <source src="intro.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+
+        <h2>Background Music</h2>
+        <audio controls>
+          <source src="music.mp3" type="audio/mpeg">
+          Your browser does not support the audio tag.
+        </audio>
+      </article>
+    </section>
+
+    <section id="contact">
+      <article>
+        <h2>Contact Me</h2>
+        <ul>
+          <li>Email: Student@example.com</li>
+          <li><a href="https://github.com/alexprofile" target="_blank">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/alexportfolio" target="_blank">LinkedIn</a></li>
+        </ul>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 Student's Portfolio. All rights reserved.
+  </footer>
+
+</body>
+</html>
