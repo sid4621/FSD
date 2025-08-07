@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Assignment</title>
+</head>
+<body>
+    <h1>JavaScript Assignment</h1>
+    <section>
+        <h2>
+            Task 1
+        </h2>
+        <p>write a program that takes two numbers as input using prompt and display sum using alert</p>
+        <button onclick="addNum()">Add Numbers</button>
+    </section>
+    <section>
+        <h2>
+            Task 2
+        </h2>
+        <p>Ask the user to enter a number. Display whether the number is even or odd using if...else.</p>
+        <button onclick="evenOrOdd()">Check Odd or even</button>
+    </section>
+    <section>
+        <h2>
+            Task 3
+        </h2>
+        <p> Ask the user to input a number, and display its square (number × number).</p>
+        <button onclick="squareNum()">Square of a number</button>
+    </section>
+    <section>
+        <h2>
+            Task 4
+        </h2>
+        <p>Write a JavaScript program to take a string as input and print its reverse.</p>
+        <button onclick="reverseString()">Reverse String</button>
+    </section>
+    <section>
+        <h2>
+            Task 5
+        </h2>
+        <p> Write a script that displays the current date and time on the webpage.</p>
+        <button onclick="showDateAndTime()">Show Date and Time</button>
+        <p id="dateAndTime"></p>
+    </section>
+</body>
+<script>
+    function addNum(){
+        let num1 = parseFloat(prompt("Enter first number:"));
+        let num2 = parseFloat(prompt("Enter second number:"));
+        let sum = num1+num2;
+        alert("Sum of "+ num1 + " + " + num2 + " = " + sum);
+    } 
+    function evenOrOdd(){
+        let num = parseInt(prompt("Enter a number:"));
+        if(num % 2 === 0){
+            alert("The number " + num + " is even.");
+        } else {
+            alert("The number " + num + " is odd.");
+        }
+    }
+    function squareNum(){
+        let num = parseInt(prompt("Enter a number:"));
+        let square = num * num;
+        alert("The square of " + num + " is " + square);
+    }
+    function reverseString(){
+        let str = prompt("Enter a string:");
+        let reversedStr = str.split('').reverse().join('');
+        alert("The reverse of " + str + " is " + reversedStr);
+    }
+    function showDateAndTime(){
+        let currentDate = new Date();
+        document.getElementById("dateAndTime").innerText = "Current Date and Time: " + currentDate.toLocaleString();
+    }
+</script>
+</html>

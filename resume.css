@@ -1,0 +1,43 @@
+#name{
+    text-align: center;
+    font-size: 50px;
+    color: #000068;
+}
+#resume{
+    width: 60%;
+    margin: auto;
+    border: 2px solid;
+    padding: 16px;
+    background-color: white;
+}
+body{
+    background-color: gray;
+}
+.navbar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 30%;
+    padding-right: 30%;
+}
+a:hover{
+    color: orange;
+    text-decoration: none;
+}
+#degree{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 20px;
+}
+#skills{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 20%;
+}
+.subtitle{
+    font-size: 30px;
+    text-decoration: underline;
+    color: #000068;
+}

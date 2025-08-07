@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magazine Subscription Manager</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background-color: #f4f4f9; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1, h2 { color: #333; }
+        form { margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; background: #f9f9f9; }
+        input[type="text"], input[type="number"], input[type="date"] { width: calc(100% - 22px); padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        button { cursor: pointer; background-color: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 4px; font-size: 16px; }
+        button:hover { background-color: #0056b3; }
+        .delete-btn { background-color: #dc3545; }
+        .delete-btn:hover { background-color: #c82333; }
+        .edit-btn { background-color: #ffc107; color: #212529; }
+        .edit-btn:hover { background-color: #e0a800; }
+        .subscription-item { background: #fff; border: 1px solid #eee; padding: 15px; margin-bottom: 10px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
+        .subscription-item .info { flex-grow: 1; }
+        .subscription-item .actions { display: flex; gap: 10px; }
+        #updateForm { display: none; } /* Hide update form by default */
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Magazine Subscription Manager 🧾</h1>
+
+        <div id="create-form-container">
+            <h2>Add New Subscription</h2>
+            <form id="createForm">
+                <input type="text" id="subscriberId" placeholder="Subscriber ID" required>
+                <input type="text" id="magazineName" placeholder="Magazine Name" required>
+                <input type="date" id="subscriptionDate" required>
+                <input type="number" id="duration" placeholder="Duration (months)" required>
+                <button type="submit">Add Subscription</button>
+            </form>
+        </div>
+
+        <div id="update-form-container" style="display: none;">
+            <h2>Edit Subscription</h2>
+            <form id="updateForm">
+                <input type="hidden" id="updateId">
+                <input type="text" id="updateSubscriberId" placeholder="Subscriber ID" required>
+                <input type="text" id="updateMagazineName" placeholder="Magazine Name" required>
+                <input type="date" id="updateSubscriptionDate" required>
+                <input type="number" id="updateDuration" placeholder="Duration (months)" required>
+                <button type="submit">Save Changes</button>
+                <button type="button" id="cancelUpdate">Cancel</button>
+            </form>
+        </div>
+
+        <hr>
+
+        <h2>Current Subscriptions</h2>
+        <div id="magazineList"></div>
+    </div>
+
+    <script>
+        const apiUrl = 'http://localhost:3000/magazines';
+        const createForm = document.getElementById('createForm');
+        const updateForm = document.getElementById('updateForm');
+        const magazineList = document.getElementById('magazineList');
+        const createFormContainer = document.getElementById('create-form-container');
+        const updateFormContainer = document.getElementById('update-form-container');
+        
+        // --- READ: Fetch and display all subscriptions ---
+        async function fetchMagazines() {
+            try {
+                const response = await fetch(apiUrl);
+                const magazines = await response.json();
+                magazineList.innerHTML = ''; // Clear current list
+                
+                magazines.forEach(mag => {
+                    const subDate = new Date(mag.Subscription_date).toLocaleDateString();
+                    const item = document.createElement('div');
+                    item.className = 'subscription-item';
+                    item.innerHTML = `
+                        <div class="info">
+                            <strong>${mag.Magazine_name}</strong><br>
+                            <small>Subscriber ID: ${mag.Subscriber_id} | Date: ${subDate} | Duration: ${mag.duration} months</small>
+                        </div>
+                        <div class="actions">
+                            <button class="edit-btn" onclick="showUpdateForm('${mag._id}')">Edit</button>
+                            <button class="delete-btn" onclick="deleteMagazine('${mag._id}')">Delete</button>
+                        </div>
+                    `;
+                    magazineList.appendChild(item);
+                });
+            } catch (error) {
+                console.error('Error fetching magazines:', error);
+            }
+        }
+
+        // --- CREATE: Handle new subscription form submission ---
+        createForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const body = {
+                Subscriber_id: document.getElementById('subscriberId').value,
+                Magazine_name: document.getElementById('magazineName').value,
+                Subscription_date: document.getElementById('subscriptionDate').value,
+                duration: document.getElementById('duration').value,
+            };
+            
+            try {
+                await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                createForm.reset();
+                fetchMagazines(); // Refresh list
+            } catch (error) {
+                console.error('Error creating subscription:', error);
+            }
+        });
+        
+        // --- UPDATE (Part 1): Show and populate the update form ---
+        async function showUpdateForm(id) {
+            try {
+                const response = await fetch(`${apiUrl}/${id}`);
+                const mag = await response.json(); // Assuming the backend can fetch a single item by ID
+                
+                // You'll need to add a GET /magazines/:id route to your backend for this to work perfectly.
+                // For now, we'll just pre-fill what we can. A full implementation would fetch the latest data.
+                
+                document.getElementById('updateId').value = mag._id;
+                document.getElementById('updateSubscriberId').value = mag.Subscriber_id;
+                document.getElementById('updateMagazineName').value = mag.Magazine_name;
+                document.getElementById('updateSubscriptionDate').value = new Date(mag.Subscription_date).toISOString().split('T')[0];
+                document.getElementById('updateDuration').value = mag.duration;
+
+                createFormContainer.style.display = 'none';
+                updateFormContainer.style.display = 'block';
+            } catch (error) {
+                console.error('Error preparing update form:', error);
+                // The provided Node.js code doesn't have a GET by ID route. Add one for this to work.
+                alert("To edit, please add a `GET /magazines/:id` route to your Node.js server.");
+            }
+        }
+        
+        // --- UPDATE (Part 2): Handle update form submission ---
+        updateForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('updateId').value;
+            const body = {
+                Subscriber_id: document.getElementById('updateSubscriberId').value,
+                Magazine_name: document.getElementById('updateMagazineName').value,
+                Subscription_date: document.getElementById('updateSubscriptionDate').value,
+                duration: document.getElementById('updateDuration').value,
+            };
+
+            try {
+                await fetch(`${apiUrl}/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                
+                updateForm.reset();
+                updateFormContainer.style.display = 'none';
+                createFormContainer.style.display = 'block';
+                fetchMagazines(); // Refresh list
+            } catch (error) {
+                console.error('Error updating subscription:', error);
+            }
+        });
+
+        // --- Cancel Update ---
+        document.getElementById('cancelUpdate').addEventListener('click', () => {
+            updateForm.reset();
+            updateFormContainer.style.display = 'none';
+            createFormContainer.style.display = 'block';
+        });
+
+        // --- DELETE: Handle delete button click ---
+        async function deleteMagazine(id) {
+            if (!confirm('Are you sure you want to delete this subscription?')) return;
+            
+            try {
+                await fetch(`${apiUrl}/${id}`, {
+                    method: 'DELETE'
+                });
+                fetchMagazines(); // Refresh list
+            } catch(error) {
+                console.error('Error deleting subscription:', error);
+            }
+        }
+
+        // Initial fetch of data when the page loads
+        document.addEventListener('DOMContentLoaded', fetchMagazines);
+    </script>
+</body>
+</html>
